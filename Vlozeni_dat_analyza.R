@@ -25,7 +25,9 @@ renv::install("here")
 renv::install("tidyverse")  
 renv::install("readxl")
 renv::install("usethis")
+renv::install("waffle")
 
+library("waffle")
 library("here")  
 library("tidyverse")  
 library("readxl")
@@ -48,8 +50,8 @@ here::here("Data","Handrkov.raw.xlsx")
 
 handrkov <- readxl::read_xlsx("Data/Handrkov_raw.xlsx", 
                               na = c("", NA), 
-                              col_types = c("text", "text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "text", "text", "text", "numeric", "skip", "numeric", "date", "text"),
-                              col_names = c("id", "druh_kytky", "typ", "klec_pytlik", "mnozstvi_roztoku", "mnozstvi_pylu_konspecificky", "mnozstvi_pylu_celkem", "mnozstvi_pylu_heterospecificky", "vyska_rostliny", "barva_pytliku", "opylovac", "chovani", "delka_navstevy", "zacatek_konec_cas", "pocet_navstev_hodinu", "cas_navstevy", "pohlavi"),
+                              col_types = c("text", "text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "text", "text", "text", "numeric", "skip", "numeric", "date", "text", "numeric"),
+                              col_names = c("id", "druh_kytky", "typ", "klec_pytlik", "mnozstvi_roztoku", "mnozstvi_pylu_konspecificky", "mnozstvi_pylu_celkem", "mnozstvi_pylu_heterospecificky", "vyska_rostliny", "barva_pytliku", "opylovac", "chovani", "delka_navstevy", "zacatek_konec_cas", "pocet_navstev_hodinu", "cas_navstevy", "pohlavi", "rok"),
                               skip = 1
                               )
 
@@ -194,7 +196,7 @@ ggplot2::ggplot(
   data = tabulka_depozice_pyl_nektar_tenax,
   mapping = aes(x = chovani, y = mnozstvi_pylu_konspecificky, color = chovani)
 ) +
-  geom_boxplot() +
+  geom_boxplot(na.rm = TRUE) +
   labs (
     title = "Mnozstvi deponovaneho pylu v zavislosti na chovani u eristalis tenax",
     x = "Druh chovani",
@@ -235,9 +237,11 @@ ggplot2::ggplot(
   ) 
 
 
+### 3.6.0 celkove spektrum opylovacu ----
+#----------------------------------------------------------#
+opylovaci <- handrkov$opylovac
 
 
-
-
+waffle::waffle(x = opylovaci, rows = 8)
 
 
